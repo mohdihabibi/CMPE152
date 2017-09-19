@@ -5,7 +5,7 @@
 # For instructional purposes only.  No warranties.
 #
 TARGET = Chapter3cpp
-SRCS = Pascal.cpp \
+SRCS = Java.cpp \
        wci/frontend/FrontendFactory.cpp \
        wci/frontend/Parser.cpp \
        wci/frontend/Scanner.cpp \
