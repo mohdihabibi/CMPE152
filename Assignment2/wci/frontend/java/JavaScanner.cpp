@@ -103,7 +103,7 @@ void JavaScanner::skip_white_space() throw (string)
 				{
 	                current_ch = next_char();  // consume comment characters
 
-				}while((current_ch != Source::END_OF_FILE));
+				}while((current_ch != Source::END_OF_LINE));
 
 			}
 
