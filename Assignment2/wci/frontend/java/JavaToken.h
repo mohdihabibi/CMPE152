@@ -28,7 +28,7 @@ enum class JavaTokenType
 	// Reserved words.
 	CASE, CONST, DO, ELSE, FOR, GOTO, IF, WHILE,
 	ABSTRACT, DOUBLE, BREAK, ENUM, CHAR, EXTENDS,
-	CLASS, FLOAT, CONTINUE, INT, LONG, NATIVE,
+	CLASS, FLOAT, CONTINUE, INT, NATIVE,
 	RETURN, SHORT, PACKAGE, PROTECTED, STATIC,
 	LONG, SWITCH, SUPER, THIS, THROW, VOID, VOLATILE,
 
@@ -56,8 +56,6 @@ constexpr JavaTokenType PT_CHAR = JavaTokenType::CHAR;
 constexpr JavaTokenType PT_EXTENDS = JavaTokenType::EXTENDS;
 constexpr JavaTokenType PT_CLASS = JavaTokenType::CLASS;
 constexpr JavaTokenType PT_FLOAT = JavaTokenType::FLOAT;
-constexpr JavaTokenType PT_CONST = JavaTokenType::CONST;
-constexpr JavaTokenType PT_FOR = JavaTokenType::FOR;
 constexpr JavaTokenType PT_CONTINUE = JavaTokenType::CONTINUE;
 constexpr JavaTokenType PT_INT = JavaTokenType::INT;
 constexpr JavaTokenType PT_NATIVE = JavaTokenType::NATIVE;
