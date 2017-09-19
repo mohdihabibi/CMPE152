@@ -35,7 +35,7 @@ void JavaSpecialSymbolToken::extract() throw (string)
 	{
 	// Single-character special symbols.
 
-	case '~' : case '@' : case '/' : case ';' : case '?' :
+	case '~' : case '@' : case ';' : case '?' :
 	case '.' : case '\"' : case '\'' : case '(' : case ')' :
 	case '[' : case ']' : case '{' : case'}': case ',' :
 

@@ -92,7 +92,7 @@ void JavaScanner::skip_white_space() throw (string)
             }
         }
         // //
-        else if ()
+        else if ( current_ch == '/')
         {
         	current_ch = next_char();
 
