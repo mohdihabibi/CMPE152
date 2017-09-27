@@ -33,41 +33,25 @@ DataValue *WhenExecutor::execute(ICodeNode *node)
 {
     // Get the IF node's children.
     vector<ICodeNode *> children = node->get_children();
-    vector<ICodeNode *> left_stmt;
-    vector<ICodeNode *> right_stmt;
-    vector<ICodeNode *> otherwise_stmt;
-    for(int i = 0; i < children.size()-2; )
-    {
-        if(children[i]->get_type() == (ICodeNodeType)NT_OTHERWISE){
-            otherwise_stmt.push_back(children[i]);
-            i = i + 1;
-        } else if(children[i]->get_type() == (ICodeNodeType)NT_WHEN_BRANCH)
-        {
-            left_stmt.push_back(children[i]);
-            right_stmt.push_back(children[i+1]);
-            i = i + 2;
-        } 
-
-    }
+    ICodeNode *expr_node = children[0];
+    ICodeNode *right_arrow_stmt_node = children[1];
+    ICodeNode *otherwise_stmt_node = children.size() > 2 ? children[2] : nullptr;
 
     ExpressionExecutor expression_executor(this);
     StatementExecutor statement_executor(this);
 
     // Evaluate the expression to determine which statement to execute.
-    for( int i = 0; i < left_stmt.size()+otherwise_stmt.size(); i = i++)
+    DataValue *data_value = expression_executor.execute(expr_node);
+    if (data_value->b)
     {
-        DataValue *data_value = expression_executor.execute(left_stmt[i]);
-        if (data_value->b)
-        {
-            statement_executor.execute(right_stmt[i]);
-        }
-        else if (otherwise_stmt[i] != nullptr)
-        {
-            statement_executor.execute(otherwise_stmt[i]);
-        }
-
-        ++execution_count;  // count the WHEN_BRANCH(technically) statement itself
+        statement_executor.execute(right_arrow_stmt_node);
     }
+    else if (otherwise_stmt_node != nullptr)
+    {
+        statement_executor.execute(otherwise_stmt_node);
+    }
+
+    ++execution_count;  // count the IF statement itself
     return nullptr;
 }
 
