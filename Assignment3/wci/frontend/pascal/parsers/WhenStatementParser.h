@@ -21,7 +21,7 @@ using namespace wci::frontend;
 using namespace wci::frontend::pascal;
 using namespace wci::intermediate;
 
-class WHENStatementParser : public StatementParser
+class WhenStatementParser : public StatementParser
 {
 public:
     /**
@@ -41,7 +41,8 @@ public:
 private:
     // Synchronization set for THEN.
     static set<PascalTokenType> OTHERWISE;
-    static set<PascalTokenType> WHEN_BRANCH;
+    static set<PascalTokenType> WHEN_BRANCH_SET;
+    static set<PascalTokenType> RIGHT_ARROW_SET;
 
     static bool INITIALIZED;
 

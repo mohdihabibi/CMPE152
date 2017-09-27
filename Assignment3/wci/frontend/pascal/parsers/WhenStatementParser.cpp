@@ -8,7 +8,7 @@
  */
 #include <string>
 #include <set>
-#include "IfStatementParser.h"
+#include "WhenStatementParser.h"
 #include "StatementParser.h"
 #include "AssignmentStatementParser.h"
 #include "ExpressionParser.h"
@@ -27,16 +27,16 @@ using namespace wci::frontend::pascal;
 using namespace wci::intermediate;
 using namespace wci::intermediate::icodeimpl;
 
-bool IfStatementParser::INITIALIZED = false;
+bool WhenStatementParser::INITIALIZED = false;
 
-set<PascalTokenType> IfStatementParser::THEN_SET;
+set<PascalTokenType> WhenStatementParser::RIGHT_ARROW_SET;
 
-void IfStatementParser::initialize()
+void WhenStatementParser::initialize()
 {
     if (INITIALIZED) return;
 
-    THEN_SET = StatementParser::STMT_START_SET;
-    THEN_SET.insert(PascalTokenType::THEN);
+    RIGHT_ARROW_SET = StatementParser::STMT_START_SET;
+    RIGHT_ARROW_SET.insert(PascalTokenType::RIGHT_ARROW);
 
     set<PascalTokenType>::iterator it;
     for (it  = StatementParser::STMT_FOLLOW_SET.begin();
@@ -49,29 +49,29 @@ void IfStatementParser::initialize()
     INITIALIZED = true;
 }
 
-IfStatementParser::IfStatementParser(PascalParserTD *parent)
+WhenStatementParser::WhenStatementParser(PascalParserTD *parent)
     : StatementParser(parent)
 {
     initialize();
 }
 
-ICodeNode *IfStatementParser::parse_statement(Token *token) throw (string)
+ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
 {
     token = next_token(token);  // consume the IF
 
     // Create an IF node.
-    ICodeNode *if_node =
-            ICodeFactory::create_icode_node((ICodeNodeType) NT_IF);
+    ICodeNode *when_branch_node =
+            ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN_BRANCH);
 
 
     // Parse the expression.
     // The IF node adopts the expression subtree as its first child.
     ExpressionParser expression_parser(this);
-    if_node->add_child(expression_parser.parse_statement(token));
+    when_branch_node->add_child(expression_parser.parse_statement(token));
 
-    // Synchronize at the THEN.
-    token = synchronize(THEN_SET);
-    if (token->get_type() == (TokenType) PT_THEN)
+    // Synchronize at the RIGHT ARROW.
+    token = synchronize(RIGHT_ARROW_SET);
+    if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
     {
         token = next_token(token);  // consume the THEN
     }
@@ -82,20 +82,20 @@ ICodeNode *IfStatementParser::parse_statement(Token *token) throw (string)
     // Parse the THEN statement.
     // The IF node adopts the statement subtree as its second child.
     StatementParser statement_parser(this);
-    if_node->add_child(statement_parser.parse_statement(token));
+    when_branch_node->add_child(statement_parser.parse_statement(token));
     token = current_token();
 
     // Look for an ELSE.
-    if (token->get_type() == (TokenType) PT_ELSE)
+    if (token->get_type() == (TokenType) PT_OTHERWISE)
     {
         token = next_token(token);  // consume the THEN
 
         // Parse the ELSE statement.
         // The IF node adopts the statement subtree as its third child.
-        if_node->add_child(statement_parser.parse_statement(token));
+        when_branch_node->add_child(statement_parser.parse_statement(token));
     }
 
-    return if_node;
+    return when_node;
 }
 
 }}}}  // namespace wci::frontend::pascal::parsers

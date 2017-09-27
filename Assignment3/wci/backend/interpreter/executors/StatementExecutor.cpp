@@ -74,6 +74,12 @@ DataValue *StatementExecutor::execute(ICodeNode *node)
 
         case NT_NO_OP: return nullptr;
 
+        case NT_WHEN:
+        {
+            WhenExecutor select_executor(this);
+            return when_executor.execute(node);
+        }
+
         default:
         {
             error_handler.flag(node, UNIMPLEMENTED_FEATURE, this);
