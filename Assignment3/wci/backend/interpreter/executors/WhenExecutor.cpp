@@ -31,24 +31,33 @@ DataValue *WhenExecutor::execute(ICodeNode *node)
 {
     // Get the IF node's children.
     vector<ICodeNode *> children = node->get_children();
-    for(int i = 0; i < children.size()-2; i = i + 2 )
+    vector<ICodeNode *> left_stmt;
+    vector<ICodeNode *> right_stmt;
+    vector<ICodeNode *> otherwise_stmt;
+    for(int i = 0; i < children.size()-2; )
     {
-        ICodeNode *expr_node = children[i];
-        ICodeNode *right_arrow_stmt_node = children[i+1];
+        if(children[i].get_type() == NT_OTHERWISE){
+            otherwise_stmt.push_back(children[i]);
+            i = i + 1;
+        } else if(children[i].get_type() == NT_WHEN_BRANCH)
+        {
+            left_stmt.push_back(children[i]);
+            right_stmt.push_back(children[i+1]);
+            i = i + 2;
+        } 
+
     }
-    //If its odd then we have an otherwise
-    ICodeNode *otherwise_stmt_node = !(children.size() % 2) ? children[children.size()-1] : nullptr;
 
     ExpressionExecutor expression_executor(this);
     StatementExecutor statement_executor(this);
 
     // Evaluate the expression to determine which statement to execute.
-    for( int i = 0; i < (children.size()/2)-1; i = i++)
+    for( int i = 0; i < children.size()-1; i = i++)
     {
-        DataValue *data_value = expression_executor.execute(expr_node[i]);
+        DataValue *data_value = expression_executor.execute(left_stmt[i]);
         if (data_value->b)
         {
-            statement_executor.execute(right_arrow_stmt_node[i]);
+            statement_executor.execute(right_stmt[i]);
         }
         else if (otherwise_stmt_node != nullptr)
         {

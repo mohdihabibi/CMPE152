@@ -74,7 +74,7 @@ DataValue *StatementExecutor::execute(ICodeNode *node)
 
         case NT_NO_OP: return nullptr;
 
-        case NT_WHEN:
+        case NT_WHEN_BRANCH:
         {
             WhenExecutor select_executor(this);
             return when_executor.execute(node);
