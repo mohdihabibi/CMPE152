@@ -85,7 +85,8 @@ void PascalError::initialize()
 
         // Fatal errors.
         PascalErrorCode::IO_ERROR,
-        PascalErrorCode::TOO_MANY_ERRORS
+        PascalErrorCode::TOO_MANY_ERRORS,
+        PascalErrorCode::MISSING_RIGHT_ARROW,
     };
 
     vector<string> error_messages =
@@ -150,7 +151,8 @@ void PascalError::initialize()
 
         // Fatal errors.
         "Object I/O error",
-        "Too many syntax errors"
+        "Too many syntax errors",
+        "Missing When Right Arrow"
     };
 
     for (int i = 0; i < error_codes.size(); i++)
