@@ -21,7 +21,7 @@ using namespace wci::frontend;
 using namespace wci::frontend::pascal;
 using namespace wci::intermediate;
 
-class WHENStatementParser : public StatementParser
+class WhenStatementParser : public StatementParser
 {
 public:
     /**

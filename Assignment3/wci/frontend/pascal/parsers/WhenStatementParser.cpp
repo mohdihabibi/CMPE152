@@ -97,7 +97,7 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
 
         // Parse the ELSE statement.
         // The IF node adopts the statement subtree as its third child.
-        when_node->add_child(statement_parser.parse_statement(PT_WHEN));
+        when_node->add_child(statement_parser.parse_statement((Token*)PT_WHEN));
     }
     else{
         if(token->get_type() == (TokenType) PT_END){
