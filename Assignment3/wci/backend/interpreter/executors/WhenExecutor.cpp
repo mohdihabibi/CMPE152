@@ -36,10 +36,10 @@ DataValue *WhenExecutor::execute(ICodeNode *node)
     vector<ICodeNode *> otherwise_stmt;
     for(int i = 0; i < children.size()-2; )
     {
-        if(children[i].get_type() == NT_OTHERWISE){
+        if(children[i]->get_type() == (ICodeNodeType)NT_OTHERWISE){
             otherwise_stmt.push_back(children[i]);
             i = i + 1;
-        } else if(children[i].get_type() == NT_WHEN_BRANCH)
+        } else if(children[i]->get_type() == (ICodeNodeType)NT_WHEN_BRANCH)
         {
             left_stmt.push_back(children[i]);
             right_stmt.push_back(children[i+1]);
@@ -52,16 +52,16 @@ DataValue *WhenExecutor::execute(ICodeNode *node)
     StatementExecutor statement_executor(this);
 
     // Evaluate the expression to determine which statement to execute.
-    for( int i = 0; i < children.size()-1; i = i++)
+    for( int i = 0; i < left_stmt.size()+otherwise_stmt.size(); i = i++)
     {
         DataValue *data_value = expression_executor.execute(left_stmt[i]);
         if (data_value->b)
         {
             statement_executor.execute(right_stmt[i]);
         }
-        else if (otherwise_stmt_node != nullptr)
+        else if (otherwise_stmt[i] != nullptr)
         {
-            statement_executor.execute(otherwise_stmt_node[i]);
+            statement_executor.execute(otherwise_stmt[i]);
         }
 
         ++execution_count;  // count the WHEN_BRANCH(technically) statement itself

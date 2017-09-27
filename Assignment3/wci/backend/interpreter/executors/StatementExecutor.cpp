@@ -12,6 +12,7 @@
 #include "LoopExecutor.h"
 #include "IfExecutor.h"
 #include "SelectExecutor.h"
+#include "WhenExecutor.h"
 #include "../Executor.h"
 #include "../RuntimeError.h"
 #include "../../../DataValue.h"
@@ -76,7 +77,7 @@ DataValue *StatementExecutor::execute(ICodeNode *node)
 
         case NT_WHEN_BRANCH:
         {
-            WhenExecutor select_executor(this);
+            WhenExecutor when_executor(this);
             return when_executor.execute(node);
         }
 
