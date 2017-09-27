@@ -1,5 +1,5 @@
 /**
- * <h1>IfStatementParser</h1>
+ * <h1>WhenStatementParser</h1>
  *
  * <p>Parse a Pascal IF statement.</p>
  *
@@ -8,7 +8,7 @@
  */
 #include <string>
 #include <set>
-#include "IfStatementParser.h"
+#include "WhenStatementParser.h"
 #include "StatementParser.h"
 #include "AssignmentStatementParser.h"
 #include "ExpressionParser.h"
@@ -27,75 +27,89 @@ using namespace wci::frontend::pascal;
 using namespace wci::intermediate;
 using namespace wci::intermediate::icodeimpl;
 
-bool IfStatementParser::INITIALIZED = false;
+bool WhenStatementParser::INITIALIZED = false;
 
-set<PascalTokenType> IfStatementParser::THEN_SET;
+set<PascalTokenType> WhenStatementParser::RIGHT_ARROW_SET;
 
-void IfStatementParser::initialize()
+void WhenStatementParser::initialize()
 {
     if (INITIALIZED) return;
 
-    THEN_SET = StatementParser::STMT_START_SET;
-    THEN_SET.insert(PascalTokenType::THEN);
+    RIGHT_ARROW_SET = StatementParser::STMT_START_SET;
+    RIGHT_ARROW_SET.insert(PascalTokenType::RIGHT_ARROW);
 
     set<PascalTokenType>::iterator it;
     for (it  = StatementParser::STMT_FOLLOW_SET.begin();
          it != StatementParser::STMT_FOLLOW_SET.end();
          it++)
     {
-        THEN_SET.insert(*it);
+        RIGHT_ARROW_SET.insert(*it);
     }
 
     INITIALIZED = true;
 }
 
-IfStatementParser::IfStatementParser(PascalParserTD *parent)
+WhenStatementParser::WhenStatementParser(PascalParserTD *parent)
     : StatementParser(parent)
 {
     initialize();
 }
 
-ICodeNode *IfStatementParser::parse_statement(Token *token) throw (string)
+ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
 {
-    token = next_token(token);  // consume the IF
+    token = next_token(token);  // consume the when
 
-    // Create an IF node.
-    ICodeNode *if_node =
-            ICodeFactory::create_icode_node((ICodeNodeType) NT_IF);
+    // Create an WHEN_BRANCH node.
+    ICodeNode *when_node =
+            ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN_BRANCH);
 
 
     // Parse the expression.
-    // The IF node adopts the expression subtree as its first child.
-    ExpressionParser expression_parser(this);
-    if_node->add_child(expression_parser.parse_statement(token));
+    // The WHEN node adopts the expression subtree as its first child.
+    if(token->get_type() == (TokenType) PT_OTHERWISE){
+        token = next_token(token);   // consume otherwise
+    }
+    else{
+        ExpressionParser expression_parser(this);
+        when_node->add_child(expression_parser.parse_statement(token));
+    }
 
-    // Synchronize at the THEN.
-    token = synchronize(THEN_SET);
-    if (token->get_type() == (TokenType) PT_THEN)
+    // Synchronize at the RIGHT_ARROW.
+    token = synchronize(RIGHT_ARROW_SET);
+    if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
     {
-        token = next_token(token);  // consume the THEN
+        token = next_token(token);  // consume the =>
     }
     else {
-        error_handler.flag(token, MISSING_THEN, this);
+        error_handler.flag(token, MISSING_RIGHT_ARROW, this);
     }
 
-    // Parse the THEN statement.
-    // The IF node adopts the statement subtree as its second child.
+    // Parse the RIGHT statement.
+    // The WHEN node adopts the statement subtree as its second child.
     StatementParser statement_parser(this);
-    if_node->add_child(statement_parser.parse_statement(token));
+    when_node->add_child(statement_parser.parse_statement(token));
     token = current_token();
 
-    // Look for an ELSE.
-    if (token->get_type() == (TokenType) PT_ELSE)
+    // Look for an SEMICOLON
+    if (token->get_type() == (TokenType) PT_SEMICOLON)
     {
-        token = next_token(token);  // consume the THEN
+        token = next_token(token);  // consume the SC
 
         // Parse the ELSE statement.
         // The IF node adopts the statement subtree as its third child.
-        if_node->add_child(statement_parser.parse_statement(token));
+        when_node->add_child(statement_parser.parse_statement(PT_WHEN));
+    }
+    else{
+        if(token->get_type() == (TokenType) PT_END){
+            token = next_token(token);                          // consume END
+            if(token->get_type() == (TokenType) PT_SEMICOLON){}
+            else{error_handler.flag(token, MISSING_SEMICOLON, this);}
+        }
+        else{error_handler.flag(token, MISSING_END, this);}
+        token = next_token(token);                              // consume Semicolon or bad token
     }
 
-    return if_node;
+    return when_node;
 }
 
 }}}}  // namespace wci::frontend::pascal::parsers

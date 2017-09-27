@@ -40,8 +40,7 @@ public:
 
 private:
     // Synchronization set for THEN.
-    static set<PascalTokenType> OTHERWISE;
-    static set<PascalTokenType> WHEN_BRANCH;
+    static set<PascalTokenType> RIGHT_ARROW_SET;
 
     static bool INITIALIZED;
 

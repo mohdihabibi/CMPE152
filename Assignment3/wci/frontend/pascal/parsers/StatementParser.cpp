@@ -15,6 +15,7 @@
 #include "ForStatementParser.h"
 #include "IfStatementParser.h"
 #include "CaseStatementParser.h"
+#include "WhenStatementParser.h"
 #include "../PascalParserTD.h"
 #include "../PascalToken.h"
 #include "../PascalError.h"
@@ -38,7 +39,7 @@ set<PascalTokenType> StatementParser::STMT_START_SET =
 
 set<PascalTokenType> StatementParser::STMT_FOLLOW_SET =
 {
-    PT_SEMICOLON, PT_END, PT_ELSE, PT_UNTIL, PT_DOT,
+    PT_SEMICOLON, PT_END, PT_ELSE, PT_UNTIL, PT_DOT, PT_OTHERWISE,
 };
 
 StatementParser::StatementParser(PascalParserTD *parent)
