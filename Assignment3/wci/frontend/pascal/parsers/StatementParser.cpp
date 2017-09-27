@@ -105,8 +105,8 @@ ICodeNode *StatementParser::parse_statement(Token *token) throw (string)
 
         case PT_WHEN:
         {
-            CaseStatementParser case_parser(this);
-            statement_node = case_parser.parse_statement(token);
+            WhenStatementParser when_parser(this);
+            statement_node = when_parser.parse_statement(token);
             break;
         }
         
