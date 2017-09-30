@@ -47,6 +47,7 @@ private:
     /**
      * Initialize the synchronization set.
      */
+
     static void initialize();
 };
 

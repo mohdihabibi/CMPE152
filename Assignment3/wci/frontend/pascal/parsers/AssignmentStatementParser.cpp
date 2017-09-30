@@ -62,7 +62,6 @@ ICodeNode *AssignmentStatementParser::parse_statement(Token *token)
     ICodeNode *assign_node =
             ICodeFactory::create_icode_node((ICodeNodeType) NT_ASSIGN);
 
-
     // Look up the target identifier in the symbol table stack.
     // Enter the identifier into the table if it's not found.
     string target_name = token->get_text();
