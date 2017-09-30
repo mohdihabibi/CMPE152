@@ -52,6 +52,9 @@ ICodeNode *StatementParser::parse_statement(Token *token) throw (string)
     ICodeNode *statement_node = nullptr;
     int line_number = token->get_line_number();
 
+    cout << "STATEMENT PARSER HERE" << endl;
+
+
     switch ((PascalTokenType) token->get_type())
     {
         case PT_BEGIN:

@@ -11,6 +11,7 @@
 #include "WhenStatementParser.h"
 #include "StatementParser.h"
 #include "AssignmentStatementParser.h"
+#include "CompoundStatementParser.h"
 #include "ExpressionParser.h"
 #include "../PascalParserTD.h"
 #include "../PascalToken.h"
@@ -61,45 +62,53 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
 
     // Create an WHEN_BRANCH node.
     ICodeNode *when_node =
-            ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN);
+            ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN_BRANCH);
 
-
+    cout << "------->" << token->get_text() << endl;
 
     ExpressionParser expression_parser(this);
     StatementParser statement_parser(this);
+    AssignmentStatementParser assignment_parser(this);
+    CompoundStatementParser compound_parser(this);
     //when_node->add_child(expression_parser.parse_statement(token));
 
     
     while ((token != nullptr) &&
            (token->get_type() != (TokenType) PT_OTHERWISE))
     {
-        when_node->add_child(expression_parser.parse_statement(token));
+            when_node->add_child(expression_parser.parse_statement(token));
+
+            token = current_token();
+        if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
+        {
+            token = next_token(token);  // consume the :
+        }
+        else
+        {
+            error_handler.flag(token, MISSING_RIGHT_ARROW, this);
+        }
+
+        if(token->get_type() == ((TokenType) PT_BEGIN))
+        {
+            when_node->add_child(compound_parser.parse_statement(token));
+        } else
+        {
+            when_node->add_child(assignment_parser.parse_statement(token));
+        }
 
         token = current_token();
-    if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
-    {
-        token = next_token(token);  // consume the :
-    }
-    else
-    {
-        error_handler.flag(token, MISSING_RIGHT_ARROW, this);
-    }
 
-    when_node->add_child(statement_parser.parse_statement(token));
+        // Look for the semicolon between CASE branches.
+        if (token->get_type() == (TokenType) PT_SEMICOLON)
+        {
+            token = next_token(token);  // consume the ;
+        }
 
-    token = current_token();
-
-    // Look for the semicolon between CASE branches.
-    if (token->get_type() == (TokenType) PT_SEMICOLON)
-    {
-        token = next_token(token);  // consume the ;
-    }
-
-    // If at the start of the next constant, then missing a semicolon.
-    else 
-    {
-        error_handler.flag(token, MISSING_SEMICOLON, this);
-    }        
+        // If at the start of the next constant, then missing a semicolon.
+        else 
+        {
+            error_handler.flag(token, MISSING_SEMICOLON, this);
+        }        
         
     }
 
@@ -121,10 +130,10 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
 
     if (token->get_type() == (TokenType) PT_END)
     {
-        token = next_token(token);  // consume Otherwise
+        token = next_token(token);  // consume semicolon
         if (token->get_type() == (TokenType) PT_SEMICOLON)
         {
-            token = next_token(token);  // consume the ;
+            //token = next_token(token);  // consume the ;
         }
 
         // If at the start of the next constant, then missing a semicolon.
