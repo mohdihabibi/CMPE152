@@ -52,7 +52,7 @@ void PascalParserTD::parse() throw (string)
     Token *token = next_token(nullptr);
     ICodeNode *root_node = nullptr;
 
-    cout << "LOOKING FOR END " << endl;
+    //cout << "LOOKING FOR END " << endl;
 
     // Look for the BEGIN token to parse a compound statement.
     if (token->get_type() == (TokenType) PT_BEGIN)

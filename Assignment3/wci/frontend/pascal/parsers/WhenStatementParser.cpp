@@ -38,6 +38,8 @@ void WhenStatementParser::initialize()
 
     RIGHT_ARROW_SET = StatementParser::STMT_START_SET;
     RIGHT_ARROW_SET.insert(PascalTokenType::RIGHT_ARROW);
+    RIGHT_ARROW_SET.insert(PascalTokenType::END);
+    RIGHT_ARROW_SET.insert(PascalTokenType::OTHERWISE);
 
     set<PascalTokenType>::iterator it;
     for (it  = StatementParser::STMT_FOLLOW_SET.begin();
@@ -61,10 +63,13 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
     token = next_token(token);  // consume the when
 
     // Create an WHEN_BRANCH node.
-    ICodeNode *when_node =
-            ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN_BRANCH);
+    ICodeNode *when_node = ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN);
+    ICodeNode *when_branch_node = ICodeFactory::create_icode_node((ICodeNodeType) NT_WHEN_BRANCH);
+    ICodeNode *otherwise_node = ICodeFactory::create_icode_node((ICodeNodeType) NT_OTHERWISE);
+    //cout << "------->" << token->get_text() << endl;
 
-    cout << "------->" << token->get_text() << endl;
+    when_node->add_child(when_branch_node);
+    when_branch_node->add_child(otherwise_node);
 
     ExpressionParser expression_parser(this);
     StatementParser statement_parser(this);
@@ -76,9 +81,10 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
     while ((token != nullptr) &&
            (token->get_type() != (TokenType) PT_OTHERWISE))
     {
-            when_node->add_child(expression_parser.parse_statement(token));
+            when_branch_node->add_child(expression_parser.parse_statement(token));
 
             token = current_token();
+            token = synchronize(RIGHT_ARROW_SET);
         if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
         {
             token = next_token(token);  // consume the :
@@ -88,17 +94,19 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
             error_handler.flag(token, MISSING_RIGHT_ARROW, this);
         }
 
+        token = synchronize(RIGHT_ARROW_SET);
         if(token->get_type() == ((TokenType) PT_BEGIN))
         {
-            when_node->add_child(compound_parser.parse_statement(token));
+            when_branch_node->add_child(compound_parser.parse_statement(token));
         } else
         {
-            when_node->add_child(assignment_parser.parse_statement(token));
+            when_branch_node->add_child(assignment_parser.parse_statement(token));
         }
 
         token = current_token();
 
         // Look for the semicolon between CASE branches.
+        token = synchronize(RIGHT_ARROW_SET);
         if (token->get_type() == (TokenType) PT_SEMICOLON)
         {
             token = next_token(token);  // consume the ;
@@ -112,6 +120,7 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
         
     }
 
+    token = synchronize(RIGHT_ARROW_SET);
     if (token->get_type() == (TokenType) PT_OTHERWISE)
     {
             token = next_token(token);  // consume Otherwise
@@ -123,17 +132,21 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
         {
             error_handler.flag(token, MISSING_RIGHT_ARROW, this);
         }
-
-        when_node->add_child(statement_parser.parse_statement(token));
+        //cout << token->get_text() << endl;
+        otherwise_node->add_child(statement_parser.parse_statement(token));
+        //cout << token->get_text() << endl;
+        //token = next_token(token);
     }
       
-
+    token = synchronize(RIGHT_ARROW_SET);
     if (token->get_type() == (TokenType) PT_END)
     {
         token = next_token(token);  // consume semicolon
+        //cout << token->get_text() << endl;
         if (token->get_type() == (TokenType) PT_SEMICOLON)
         {
             //token = next_token(token);  // consume the ;
+            //cout << token->get_text() << endl;
         }
 
         // If at the start of the next constant, then missing a semicolon.
@@ -146,47 +159,10 @@ ICodeNode *WhenStatementParser::parse_statement(Token *token) throw (string)
     {
         error_handler.flag(token, MISSING_END, this);
     }
-
+    //cout << token->get_text() << endl;
 
     return when_node;
 
-
-    // // Synchronize at the RIGHT_ARROW.
-    // token = synchronize(RIGHT_ARROW_SET);
-    // if (token->get_type() == (TokenType) PT_RIGHT_ARROW)
-    // {
-    //     token = next_token(token);  // consume the =>
-    // }
-    // else {
-    //     error_handler.flag(token, MISSING_RIGHT_ARROW, this);
-    // }
-
-    // // Parse the RIGHT statement.
-    // // The WHEN node adopts the statement subtree as its second child.
-    // StatementParser statement_parser(this);
-    // when_node->add_child(statement_parser.parse_statement(token));
-    // token = current_token();
-
-    // // Look for an SEMICOLON
-    // if (token->get_type() == (TokenType) PT_SEMICOLON)
-    // {
-    //     token = next_token(token);  // consume the SC
-
-    //     // Parse the ELSE statement.
-    //     // The IF node adopts the statement subtree as its third child.
-    //     when_node->add_child(statement_parser.parse_statement((Token*)PT_WHEN));
-    // }
-    // else{
-    //     if(token->get_type() == (TokenType) PT_END){
-    //         token = next_token(token);                          // consume END
-    //         if(token->get_type() == (TokenType) PT_SEMICOLON){}
-    //         else{error_handler.flag(token, MISSING_SEMICOLON, this);}
-    //     }
-    //     else{error_handler.flag(token, MISSING_END, this);}
-    //     token = next_token(token);                              // consume Semicolon or bad token
-    // }
-
-    // return when_node;
 }
 
 }}}}
