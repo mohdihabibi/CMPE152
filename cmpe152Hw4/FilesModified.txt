@@ -1,0 +1,17 @@
+Files that have been modified. 
+?? is file that unsure if changes need to be made
+
+Type specification parser.cpp
+PascalToken.cpp
+pascalToken.h
+ComplexTypeParser.cpp
+complexTypeParser.h
+PascalError.h
+pascalError.cpp
+TypeSpecImpl.cpp
+TypeSpecImpl.h
+VariableParser.cpp
+
+
+
+
