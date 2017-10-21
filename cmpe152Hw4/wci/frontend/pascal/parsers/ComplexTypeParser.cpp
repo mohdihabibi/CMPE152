@@ -18,6 +18,9 @@
 #include "../../../intermediate/symtabimpl/SymTabEntryImpl.h"
 #include "../../../intermediate/typeimpl/TypeSpecImpl.h"
 #include "../../../intermediate/SymTabEntry.h"
+#include "../../../intermediate/symtabimpl/Predefined.h"        // NEW
+#include "../../../intermediate/ICodeNode.h"                    // NEW
+
 
 
 namespace wci { namespace frontend { namespace pascal { namespace parsers {
@@ -54,7 +57,6 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
 {
     TypeSpec *complex_typespec =
         TypeFactory::create_type((TypeForm) TypeFormImpl::COMPLEX);
-    token = next_token(token);  // consume COMPLEX
 
     // Push a symbol table for the COMPLEX type specification.
     complex_typespec->set_attribute((TypeKey) COMPLEX_SYMTAB,
@@ -69,14 +71,29 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
     
   //  String name = "test";
 
-    SymTabEntry *id = nullptr; 
+//    SymTabEntry *id = nullptr; 
+//    id = symtab_stack->enter_local("re");
 
-    id = symtab_stack->enter_local("name");
-//    id->set_definition(definition);
+ //   id->set_definition(ICodeNodeType::NT_VARIABLE);
+
+    SymTabEntry *id = symtab_stack->enter_local("re");
     id->append_line_number(token->get_line_number());
     sublist.push_back(id);
 
-    TypeSpec *typespec = nullptr;
+    id = symtab_stack->enter_local("im");
+    id->append_line_number(token->get_line_number());
+    sublist.push_back(id);
+
+
+
+
+//    id = symtab_stack->enter_local("im");
+//    id->set_definition(definition);
+//    id->append_line_number(token->get_line_number());
+//    sublist.push_back(id);
+
+    TypeSpec *typespec = Predefined::real_type;
+//    TypeSpec *typespec = (TokenType)PT_REAL;
     for (SymTabEntry *variable_id : sublist)
     {
         variable_id->set_typespec(typespec);
@@ -84,6 +101,7 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
 
 
 
+    token = next_token(token);  // consume COMPLEX
 
     // Pop off the complex's symbol table.
     symtab_stack->pop();

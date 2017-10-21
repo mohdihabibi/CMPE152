@@ -1,39 +1,39 @@
-PROGRAM Complex;
+PROGRAM Compl;
 
 TYPE
-    complex = RECORD
+    compl = RECORD
                   re, im : real
               END;
               
     mystring = ARRAY[1..3] OF char;
 
 VAR
-    x, y, z : complex;
+    x, y, z : compl;
     
-PROCEDURE print(name : mystring; VAR z : complex);
+PROCEDURE print(name : mystring; VAR z : compl);
     BEGIN
         write(name, ' = (', z.re:0:5, ', ', z.im:0:5, ') ');
     END;
     
-PROCEDURE add(VAR x, y, z : complex);   
+PROCEDURE add(VAR x, y, z : compl);   
     BEGIN
         z.re := x.re + y.re;
         z.im := x.im + y.im;
     END;
     
-PROCEDURE subtract(VAR x, y, z : complex);
+PROCEDURE subtract(VAR x, y, z : compl);
     BEGIN
         z.re := x.re - y.re;
         z.im := x.im - y.im;
     END;
     
-PROCEDURE multiply(VAR x, y, z: complex);
+PROCEDURE multiply(VAR x, y, z: compl);
     BEGIN
         z.re := x.re*y.re - x.im*y.im;
         z.im := x.re*y.im + x.im*y.re;
     END;
     
-PROCEDURE divide(VAR x, y, z : complex);
+PROCEDURE divide(VAR x, y, z : compl);
     VAR
         denom : real;
     
@@ -44,7 +44,7 @@ PROCEDURE divide(VAR x, y, z : complex);
         z.im := (x.im*y.re - x.re*y.im)/denom;
     END;
 
-BEGIN {ComplexTest}
+BEGIN {ComplTest}
     x.re := 3; x.im := 2;  print('  x', x);
     y.re := 8; y.im := -5; print('  y', y);
     add(x, y, z);          print('x+y', z);
@@ -79,4 +79,4 @@ BEGIN {ComplexTest}
     y.re := 0;  y.im :=  1; print('  y', y);
     divide(x, y, z);        print('x/y', z);
     writeln;
-END {ComplexTest}.
+END {ComplTest}.
