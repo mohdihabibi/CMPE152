@@ -12,6 +12,9 @@ TypeSpecImpl.cpp
 TypeSpecImpl.h
 VariableParser.cpp
 
+CrossReference.cpp <NO?>
+icodeNodeImpl.h <NO?>
+Predefined.cpp
 
 
 

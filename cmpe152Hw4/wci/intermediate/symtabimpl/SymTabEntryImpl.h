@@ -79,7 +79,7 @@ enum class RoutineCodeImpl
     READ, READLN, WRITE, WRITELN,
     ABS, ARCTAN, CHR, COS, EXP, LN, ODD, ORD,
     EOF_FUNCTION, EOLN_FUNCTION,
-    PRED, ROUND, SIN, SQR, SQRT, SUCC, TRUNC,
+    PRED, ROUND, SIN, SQR, SQRT, SUCC, TRUNC, COMPLEX,                  // NEW                    
 };
 
 constexpr RoutineCodeImpl RT_DECLARED = RoutineCodeImpl::DECLARED;
@@ -105,6 +105,7 @@ constexpr RoutineCodeImpl RT_SQR = RoutineCodeImpl::SQR;
 constexpr RoutineCodeImpl RT_SQRT = RoutineCodeImpl::SQRT;
 constexpr RoutineCodeImpl RT_SUCC = RoutineCodeImpl::SUCC;
 constexpr RoutineCodeImpl RT_TRUNC = RoutineCodeImpl::TRUNC;
+constexpr RoutineCodeImpl RT_COMPLEX = RoutineCodeImpl::COMPLEX;            // NEW
 
 class SymTabEntryImpl : public SymTabEntry
 {

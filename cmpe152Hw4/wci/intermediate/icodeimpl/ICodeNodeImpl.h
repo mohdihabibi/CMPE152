@@ -42,6 +42,7 @@ enum class ICodeNodeTypeImpl
 
     // WRITE parameter
     WRITE_PARM,
+//    COMPLEX,                                            // NEW
 };
 
 constexpr ICodeNodeTypeImpl NT_PROGRAM = ICodeNodeTypeImpl::PROGRAM;
@@ -90,6 +91,7 @@ constexpr ICodeNodeTypeImpl NT_STRING_CONSTANT = ICodeNodeTypeImpl::STRING_CONST
 constexpr ICodeNodeTypeImpl NT_BOOLEAN_CONSTANT = ICodeNodeTypeImpl::BOOLEAN_CONSTANT;
 
 constexpr ICodeNodeTypeImpl NT_WRITE_PARM = ICodeNodeTypeImpl::WRITE_PARM;
+//constexpr ICodeNodeTypeImpl NT_COMPLEX_TYPE = ICodeNodeTypeImpl::COMPLEX_TYPE;           // NEW
 
 /**
  * Intermediate code node keys.

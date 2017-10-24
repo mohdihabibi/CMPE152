@@ -40,7 +40,8 @@ void ComplexTypeParser::initialize()
     if (INITIALIZED) return;
 
     DeclarationsParser::initialize();
-//    END_SET = DeclarationsParser::VAR_START_SET;
+    END_SET = DeclarationsParser::VAR_START_SET;
+    END_SET.insert(PascalTokenType::COMPLEX);                  // NEW
 //    END_SET.insert(PascalTokenType::END);
 //    END_SET.insert(PascalTokenType::SEMICOLON);
 
@@ -58,9 +59,11 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
     TypeSpec *complex_typespec =
         TypeFactory::create_type((TypeForm) TypeFormImpl::COMPLEX);
 
+    complex_typespec->set_identifier(Predefined::complex_id);
     // Push a symbol table for the COMPLEX type specification.
     complex_typespec->set_attribute((TypeKey) COMPLEX_SYMTAB,
                                    new TypeValue(symtab_stack->push()));
+ //?   TypeSpec *typespec = Predefined::complex_type;
 
     // Parse the field declarations.
     // VariableDeclarationsParser variable_declarations_parser(this);
@@ -88,7 +91,7 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
 
 
 //    id = symtab_stack->enter_local("im");
-//    id->set_definition(definition);
+    id->set_definition((Definition) DF_TYPE);
 //    id->append_line_number(token->get_line_number());
 //    sublist.push_back(id);
 
