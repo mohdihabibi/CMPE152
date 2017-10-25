@@ -56,9 +56,10 @@ ComplexTypeParser::ComplexTypeParser(PascalParserTD *parent)
 
 TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
 {
-    TypeSpec *complex_typespec =
+    TypeSpec *complex_typespec = Predefined::complex_type;
         TypeFactory::create_type((TypeForm) TypeFormImpl::COMPLEX);
 
+    complex_typespec->set_attribute((TypeKey) COMPLEX_SYMTAB, new TypeValue(Predefined::complex_type));
     complex_typespec->set_identifier(Predefined::complex_id);
     // Push a symbol table for the COMPLEX type specification.
     complex_typespec->set_attribute((TypeKey) COMPLEX_SYMTAB,
@@ -78,30 +79,34 @@ TypeSpec *ComplexTypeParser::parse_declaration(Token *token) throw (string)
 //    id = symtab_stack->enter_local("re");
 
  //   id->set_definition(ICodeNodeType::NT_VARIABLE);
+    TypeSpec *typespec = Predefined::real_type;
 
     SymTabEntry *id = symtab_stack->enter_local("re");
     id->append_line_number(token->get_line_number());
+    id->set_typespec(typespec);
+
     sublist.push_back(id);
 
     id = symtab_stack->enter_local("im");
     id->append_line_number(token->get_line_number());
+    id->set_typespec(typespec);
     sublist.push_back(id);
 
 
 
 
 //    id = symtab_stack->enter_local("im");
-    id->set_definition((Definition) DF_TYPE);
+//    id->set_definition((Definition) DF_TYPE);
 //    id->append_line_number(token->get_line_number());
 //    sublist.push_back(id);
 
-    TypeSpec *typespec = Predefined::real_type;
+//    TypeSpec *typespec = Predefined::real_type;
 //    TypeSpec *typespec = (TokenType)PT_REAL;
-    for (SymTabEntry *variable_id : sublist)
+ /*   for (SymTabEntry *variable_id : sublist)
     {
         variable_id->set_typespec(typespec);
     }
-
+*/
 
 
     token = next_token(token);  // consume COMPLEX

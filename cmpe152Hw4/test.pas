@@ -14,6 +14,6 @@ PROCEDURE print(expr : mystring; VAR z : complex);
 
 BEGIN {ComplexTest}
 	test := 7;
-    x.re := 3; x.im := 2;  write('  X', x.re);
-    y.re := 8; y.im := -5;   write('  Y', y.im);
+    x.re := 3; x.im := 2;  print('  X', x);
+    y.re := 8; y.im := -5;   print('  Y', y);
 END {ComplexTest}.
