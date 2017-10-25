@@ -243,6 +243,7 @@ CellValue *CallStandardExecutor::parse_boolean(Token *token) throw (string)
 CellValue *CallStandardExecutor::execute_write_writeln(
                         ICodeNode *call_node, RoutineCode routine_code)
 {
+    cout << "1------------------" << endl;
     ICodeNode *parms_node = call_node->get_children().size() > 0
                                           ? call_node->get_children()[0]
                                           : nullptr;
@@ -250,6 +251,7 @@ CellValue *CallStandardExecutor::execute_write_writeln(
 
     if (parms_node != nullptr)
     {
+        cout << "2-------------------" << endl;
         vector<ICodeNode *> actuals = parms_node->get_children();
 
         // Loop to process each WRITE_PARM actual parameter node.
@@ -278,7 +280,7 @@ CellValue *CallStandardExecutor::execute_write_writeln(
 
             // C++ format string.
             string format = "%";
-
+            cout << "3-----------------" << endl;
             // Process any field width and precision values.
             if (children.size() > 1)
             {
@@ -294,7 +296,7 @@ CellValue *CallStandardExecutor::execute_write_writeln(
             }
 
             format += type_code;
-
+            cout << "4----------------" << endl;
             // Write the formatted value to the standard output.
             DataValue *value = cell_value->value;
             switch (type_code[0])
@@ -320,7 +322,7 @@ CellValue *CallStandardExecutor::execute_write_writeln(
                     break;
                 }
             }
-
+            cout << "5---------------" << endl;
             cout.flush();
             delete cell_value;
         }

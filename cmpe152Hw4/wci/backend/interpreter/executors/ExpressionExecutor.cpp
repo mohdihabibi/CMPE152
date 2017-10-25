@@ -308,6 +308,7 @@ CellValue *ExpressionExecutor::execute_binary_operator(
     bool integer_mode = false;
     bool character_mode = false;
     bool string_mode = false;
+    bool complex_mode = false;
 
     if (   (typespec1 == Predefined::integer_type)
         && (typespec2 == Predefined::integer_type))
@@ -327,6 +328,10 @@ CellValue *ExpressionExecutor::execute_binary_operator(
              && (operand2->type == STRING))
     {
         string_mode = true;
+    } else if (   (typespec1 == Predefined::complex_type)
+        && (typespec2 == Predefined::complex_type))
+    {
+        complex_mode = true;
     }
 
     // ====================
@@ -335,7 +340,10 @@ CellValue *ExpressionExecutor::execute_binary_operator(
 
     if (ARITH_OPS.find(node_type) != ARITH_OPS.end())
     {
-        if (integer_mode)
+        if(complex_mode){
+            cout << "hi" << endl;
+        }
+        else if (integer_mode)
         {
             int value1 = operand1->i;
             int value2 = operand2->i;
