@@ -59,7 +59,7 @@ public:
     static SymTabEntry *sqrt_id;
     static SymTabEntry *succ_id;
     static SymTabEntry *trunc_id;
-    static SymTabEntry *complex_id;             // NEW
+    static SymTabEntry *complex_id;
 
     /**
      * Initialize a symbol table stack with predefined identifiers.

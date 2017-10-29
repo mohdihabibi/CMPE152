@@ -82,7 +82,6 @@ void PascalError::initialize()
         PascalErrorCode::UNIMPLEMENTED,
         PascalErrorCode::UNRECOGNIZABLE,
         PascalErrorCode::WRONG_NUMBER_OF_PARMS,
-        PascalErrorCode::NOT_COMPLEX_TYPE,                  //NEW
 
         // Fatal errors.
         PascalErrorCode::IO_ERROR,
@@ -148,7 +147,6 @@ void PascalError::initialize()
         "Unimplemented feature",
         "Unrecognizable input",
         "Wrong number of actual parameters",
-        "Not a complex type",                               // NEW
 
         // Fatal errors.
         "Object I/O error",

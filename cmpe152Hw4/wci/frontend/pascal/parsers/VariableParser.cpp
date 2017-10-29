@@ -234,36 +234,6 @@ ICodeNode *VariableParser::parse_field(TypeSpec *variable_typespec)
             error_handler.flag(field_token, INVALID_FIELD, this);
         }
     }
-
-                                                                            // NEW BLOCK
-    else if (   (token_type == (TokenType) PT_IDENTIFIER)
-        && (variable_form == (TypeForm) TypeFormImpl::COMPLEX))
-    {
-        TypeValue *type_value =
-                variable_typespec->get_attribute((TypeKey) COMPLEX_SYMTAB);
-        SymTab *symtab = type_value->symtab;
-        string name = token->get_text();
-        transform(name.begin(), name.end(), name.begin(), ::tolower);
-        SymTabEntry *field_id = symtab->lookup(name);
-
-        if (field_id != nullptr)
-        {
-            variable_typespec = field_id->get_typespec();
-            field_id->append_line_number(token->get_line_number());
-
-            // Set the field identifier's name.
-            field_node->set_attribute((ICodeKey) ID,
-                                      new NodeValue(field_id));
-        }
-        else
-        {
-            error_handler.flag(field_token, INVALID_FIELD, this);
-        }
-    }
-
-                                                                            // END NEW BLOCK
-
-
     else
     {
         error_handler.flag(field_token, INVALID_FIELD, this);

@@ -34,12 +34,11 @@ void TypeSpecImpl::initialize()
         TypeFormImpl::SUBRANGE,
         TypeFormImpl::ARRAY,
         TypeFormImpl::RECORD,
-        TypeFormImpl::COMPLEX,                          // NEW
     };
 
     vector<string> form_names =
     {
-        "scalar", "enumeration", "subrange", "array", "record", "complex",    // NEW
+        "scalar", "enumeration", "subrange", "array", "record",
     };
 
     for (int i = 0; i < form_keys.size(); i++)

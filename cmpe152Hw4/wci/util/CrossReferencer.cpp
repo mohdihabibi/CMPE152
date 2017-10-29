@@ -307,13 +307,6 @@ void CrossReferencer::print_type_detail(TypeSpec *typespec,
             break;
         }
 
-        case TF_COMPLEX:                                            // NEW BLOCK
-        {
-   //         complex_types.push_back(typespec);
-            cout << "TF_COMPLEX**************" << endl;
-            break;
-        }
-
         default: break;  // shouldn't get here
     }
 }

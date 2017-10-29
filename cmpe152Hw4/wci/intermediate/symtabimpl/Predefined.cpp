@@ -14,6 +14,7 @@
 #include "../TypeFactory.h"
 #include "../SymTabEntry.h"
 #include "../SymTabStack.h"
+#include "../SymTabFactory.h"
 #include "../typeimpl/TypeSpecImpl.h"
 #include "../../DataValue.h"
 
@@ -31,7 +32,7 @@ TypeSpec *Predefined::real_type;
 TypeSpec *Predefined::boolean_type;
 TypeSpec *Predefined::char_type;
 TypeSpec *Predefined::undefined_type;
-TypeSpec *Predefined::complex_type;               // NEW
+TypeSpec *Predefined::complex_type;
 
 // Predefined identifiers.
 SymTabEntry *Predefined::integer_id;
@@ -61,7 +62,7 @@ SymTabEntry *Predefined::sqr_id;
 SymTabEntry *Predefined::sqrt_id;
 SymTabEntry *Predefined::succ_id;
 SymTabEntry *Predefined::trunc_id;
-SymTabEntry *Predefined::complex_id;            // NEW
+SymTabEntry *Predefined::complex_id;
 
 void Predefined::initialize(SymTabStack *symtab_stack)
 {
@@ -104,12 +105,23 @@ void Predefined::initialize_types(SymTabStack *symtab_stack)
     char_id->set_definition((Definition) DF_TYPE);
     char_id->set_typespec(char_type);
 
-    // Type complex.                                                // NEW BLOCK
+    // Type complex.
     complex_id = symtab_stack->enter_local("complex");
-    complex_type = TypeFactory::create_type((TypeForm) TF_COMPLEX);
+    complex_type = TypeFactory::create_type((TypeForm) TypeFormImpl::RECORD);
     complex_type->set_identifier(complex_id);
     complex_id->set_definition((Definition) DF_TYPE);
     complex_id->set_typespec(complex_type);
+    SymTab *csymtab = SymTabFactory::create_symtab(0);
+    complex_type->set_attribute((TypeKey) RECORD_SYMTAB,
+                                new TypeValue(csymtab));
+
+    // Complex fields re and imx.
+    SymTabEntry *re_id = csymtab->enter("re");
+    SymTabEntry *im_id = csymtab->enter("im");
+    re_id->set_typespec(real_type);
+    im_id->set_typespec(real_type);
+    re_id->set_definition((Definition) DF_FIELD);
+    im_id->set_definition((Definition) DF_FIELD);
 
     // Undefined type.
     undefined_type = TypeFactory::create_type((TypeForm) TF_SCALAR);
@@ -226,11 +238,6 @@ void Predefined::initialize_standard_routines(SymTabStack *symtab_stack)
                                (Definition) DF_FUNCTION,
                                "trunc",
                                (RoutineCode) RoutineCodeImpl::TRUNC);
-   complex_id  = enter_standard(symtab_stack,                                  // NEW BLOCK
-                               (Definition) DF_TYPE,
-                               "complex",
-                               (RoutineCode) RoutineCodeImpl::COMPLEX);
-
 }
 
 SymTabEntry *Predefined::enter_standard(SymTabStack *symtab_stack,

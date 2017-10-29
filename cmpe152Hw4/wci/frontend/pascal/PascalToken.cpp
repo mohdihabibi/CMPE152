@@ -31,7 +31,7 @@ void PascalToken::initialize()
         "ELSE", "END", "FILE", "FOR", "FUNCTION", "GOTO", "IF", "IN",
         "LABEL", "MOD", "NIL", "NOT", "OF", "OR", "PACKED", "PROCEDURE",
         "PROGRAM", "RECORD", "REPEAT", "SET", "THEN", "TO", "TYPE",
-        "UNTIL", "VAR", "WHILE", "WITH", "COMPLEX"                          // NEW
+        "UNTIL", "VAR", "WHILE", "WITH"
     };
 
     vector<PascalTokenType> rw_keys =
@@ -74,8 +74,7 @@ void PascalToken::initialize()
         PascalTokenType::UNTIL,
         PascalTokenType::VAR,
         PascalTokenType::WHILE,
-        PascalTokenType::WITH,
-        PascalTokenType::COMPLEX               // NEW
+        PascalTokenType::WITH
     };
 
     for (int i = 0; i < rw_strings.size(); i++)

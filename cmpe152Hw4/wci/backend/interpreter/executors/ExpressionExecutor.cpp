@@ -300,9 +300,9 @@ CellValue *ExpressionExecutor::execute_binary_operator(
     CellValue *cell_value2 = execute(operand_node2);
     DataValue *operand1  = cell_value1->value;
     DataValue *operand2  = cell_value2->value;
+    //this never returns complex_type typespec
     TypeSpec  *typespec1 = operand_node1->get_typespec()->base_type();
     TypeSpec  *typespec2 = operand_node2->get_typespec()->base_type();
-
     CellValue *result_cell_value;
 
     bool integer_mode = false;
@@ -328,20 +328,86 @@ CellValue *ExpressionExecutor::execute_binary_operator(
              && (operand2->type == STRING))
     {
         string_mode = true;
-    } else if (   (typespec1 == Predefined::complex_type)
-        && (typespec2 == Predefined::complex_type))
+    }
+    else if (   (typespec1 == Predefined::complex_type)
+             && (typespec2 == Predefined::complex_type))
     {
         complex_mode = true;
     }
-
     // ====================
     // Arithmetic operators
     // ====================
 
     if (ARITH_OPS.find(node_type) != ARITH_OPS.end())
     {
-        if(complex_mode){
-            cout << "hi" << endl;
+        if (complex_mode)
+        {
+            cout <<" HEREEEEEEE" << endl;
+            //int real_value1 = operand1->com.re;
+            // int im_value1 = operand1->re;
+
+            // int real_value2 = operand2->im;
+            // int im_value2 = operand2->re;
+
+            // // Integer operations.
+            // switch (node_type)
+            // {
+            //     case NT_ADD:
+            //     {
+            //         result_cell_value = new CellValue(real_value1 + real_value2);
+            //         result_cell_value2 = new CellValue(im_value1 + im_value2);
+            //         break;
+            //     }
+
+            //     case NT_SUBTRACT:
+            //     {
+            //         result_cell_value = new CellValue(real_value1 - real_value2);
+            //         result_cell_value2 = new CellValue(im_value1 - im_value2);
+            //         break;
+            //     }
+
+            //     case NT_MULTIPLY:
+            //     {
+            //         result_cell_value = new CellValue((real_value1 * real_value2)-(im_value1 * im_value2));
+            //         result_cell_value2 = new CellValue((real_value1 * im_value2)-(im_value1 * real_value2));
+            //         break;
+            //     }
+
+            //     case NT_FLOAT_DIVIDE:
+            //     case NT_INTEGER_DIVIDE:
+            //     {
+            //         // Check for division by zero.
+            //         if ((real_value2*real_value2)+(im_value2*im_value2) != 0)
+            //         {
+            //             result_cell_value = new CellValue(value1/value2);
+            //         }
+            //         else
+            //         {
+            //             error_handler.flag(node, DIVISION_BY_ZERO, this);
+            //             result_cell_value = new CellValue(0);
+            //         }
+
+            //         break;
+            //     }
+
+            //     case NT_MOD:
+            //     {
+            //         // Check for division by zero.
+            //         if (value2 != 0)
+            //         {
+            //             result_cell_value = new CellValue(value1%value2);
+            //         }
+            //         else
+            //         {
+            //             error_handler.flag(node, DIVISION_BY_ZERO, this);
+            //             result_cell_value = new CellValue(0);
+            //         }
+
+            //         break;
+            //     }
+
+            //     default: result_cell_value = nullptr;  // shouldn't get here
+            // }
         }
         else if (integer_mode)
         {

@@ -227,18 +227,19 @@ ICodeNode *ExpressionParser::parse_simple_expression(Token *token)
                     result_typespec = Predefined::integer_type;
                 }
 
-                else if (TypeChecker::are_both_complex(result_typespec,
-                                                  term_typespec))
-                {
-                    result_typespec = Predefined::complex_type;
-                }
-
                 // Both real operands or one real and one integer operand
                 // ==> real result.
                 else if (TypeChecker::is_at_least_one_real(result_typespec,
                                                            term_typespec))
                 {
                     result_typespec = Predefined::real_type;
+                }
+
+                // Both operands complex ==> complex result.
+                else if (TypeChecker::are_both_complex(result_typespec,
+                                                       term_typespec))
+                {
+                    result_typespec = Predefined::complex_type;
                 }
 
                 else
@@ -332,18 +333,18 @@ ICodeNode *ExpressionParser::parse_term(Token *token) throw (string)
                     result_typespec = Predefined::integer_type;
                 }
 
-                else if (TypeChecker::are_both_complex(result_typespec,
-                                                  factor_typespec))
-                {
-                    result_typespec = Predefined::complex_type;
-                }
-
                 // Both real operands or one real and one integer operand
                 // ==> real result.
                 else if (TypeChecker::is_at_least_one_real(result_typespec,
                                                            factor_typespec))
                 {
                     result_typespec = Predefined::real_type;
+                }
+                // Both operands complex ==> complex result.
+                else if (TypeChecker::are_both_complex(result_typespec,
+                                                       factor_typespec))
+                {
+                    result_typespec = Predefined::complex_type;
                 }
 
                 else
@@ -364,8 +365,10 @@ ICodeNode *ExpressionParser::parse_term(Token *token) throw (string)
                                                          factor_typespec))
                 {
                     result_typespec = Predefined::real_type;
-                } else if (TypeChecker::are_both_complex(result_typespec,
-                                                  factor_typespec))
+                }
+                            // Both operands complex ==> complex result.
+                else if (TypeChecker::are_both_complex(result_typespec,
+                                                       factor_typespec))
                 {
                     result_typespec = Predefined::complex_type;
                 }

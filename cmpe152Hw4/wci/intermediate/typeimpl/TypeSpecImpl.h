@@ -22,7 +22,7 @@ using namespace std;
  */
 enum class TypeFormImpl
 {
-    SCALAR, ENUMERATION, SUBRANGE, ARRAY, RECORD, COMPLEX,          //NEW
+    SCALAR, ENUMERATION, SUBRANGE, ARRAY, RECORD,
 };
 
 constexpr TypeFormImpl TF_SCALAR = TypeFormImpl::SCALAR;
@@ -30,7 +30,6 @@ constexpr TypeFormImpl TF_ENUMERATION = TypeFormImpl::ENUMERATION;
 constexpr TypeFormImpl TF_SUBRANGE = TypeFormImpl::SUBRANGE;
 constexpr TypeFormImpl TF_ARRAY = TypeFormImpl::ARRAY;
 constexpr TypeFormImpl TF_RECORD = TypeFormImpl::RECORD;
-constexpr TypeFormImpl TF_COMPLEX = TypeFormImpl::COMPLEX;          //NEW
 
 /**
  * Type specification key implementation
@@ -48,9 +47,6 @@ enum class TypeKeyImpl
 
     // Record
     RECORD_SYMTAB,
-
-    // Complex
-    COMPLEX_SYMTAB,                                 //NEW
 };
 
 constexpr TypeKeyImpl ENUMERATION_CONSTANTS = TypeKeyImpl::ENUMERATION_CONSTANTS;
@@ -61,7 +57,6 @@ constexpr TypeKeyImpl ARRAY_INDEX_TYPE = TypeKeyImpl::ARRAY_INDEX_TYPE;
 constexpr TypeKeyImpl ARRAY_ELEMENT_TYPE = TypeKeyImpl::ARRAY_ELEMENT_TYPE;
 constexpr TypeKeyImpl ARRAY_ELEMENT_COUNT = TypeKeyImpl::ARRAY_ELEMENT_COUNT;
 constexpr TypeKeyImpl RECORD_SYMTAB = TypeKeyImpl::RECORD_SYMTAB;
-constexpr TypeKeyImpl COMPLEX_SYMTAB = TypeKeyImpl::COMPLEX_SYMTAB;             //NEW
 
 class TypeSpecImpl : public TypeSpec
 {

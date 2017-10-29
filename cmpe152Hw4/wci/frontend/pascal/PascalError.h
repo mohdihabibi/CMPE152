@@ -78,7 +78,6 @@ enum class PascalErrorCode
     UNIMPLEMENTED,
     UNRECOGNIZABLE,
     WRONG_NUMBER_OF_PARMS,
-    NOT_COMPLEX_TYPE,                 // NEW
 
     // Fatal errors.
     IO_ERROR,
@@ -142,7 +141,6 @@ constexpr PascalErrorCode UNEXPECTED_TOKEN = PascalErrorCode::UNEXPECTED_TOKEN;
 constexpr PascalErrorCode UNIMPLEMENTED = PascalErrorCode::UNIMPLEMENTED;
 constexpr PascalErrorCode UNRECOGNIZABLE = PascalErrorCode::UNRECOGNIZABLE;
 constexpr PascalErrorCode WRONG_NUMBER_OF_PARMS = PascalErrorCode::WRONG_NUMBER_OF_PARMS;
-constexpr PascalErrorCode NOT_COMPLEX_TYPE = PascalErrorCode::NOT_COMPLEX_TYPE;          // NEW
 
 constexpr PascalErrorCode IO_ERROR = PascalErrorCode::IO_ERROR;
 constexpr PascalErrorCode TOO_MANY_ERRORS = PascalErrorCode::TOO_MANY_ERRORS;

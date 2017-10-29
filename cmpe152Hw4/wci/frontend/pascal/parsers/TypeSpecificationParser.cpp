@@ -11,7 +11,6 @@
 #include "SimpleTypeParser.h"
 #include "ArrayTypeParser.h"
 #include "RecordTypeParser.h"
-#include "ComplexTypeParser.h"                                      // NEW
 #include "../PascalParserTD.h"
 #include "../../../frontend/Token.h"
 #include "../../../frontend/pascal/PascalToken.h"
@@ -38,7 +37,6 @@ void TypeSpecificationParser::initialize()
     TYPE_START_SET = SimpleTypeParser::SIMPLE_TYPE_START_SET;
     TYPE_START_SET.insert(PascalTokenType::ARRAY);
     TYPE_START_SET.insert(PascalTokenType::RECORD);
-    TYPE_START_SET.insert(PascalTokenType::COMPLEX);                // NEW
     TYPE_START_SET.insert(PascalTokenType::SEMICOLON);
 
     INITIALIZED = true;
@@ -71,12 +69,6 @@ TypeSpec *TypeSpecificationParser::parse_declaration(Token *token) throw (string
         {
             RecordTypeParser record_type_parser(this);
             return record_type_parser.parse_declaration(token);
-        }
-
-        case PT_COMPLEX:                                                        // NEW
-        {
-            ComplexTypeParser complex_type_parser(this);
-            return complex_type_parser.parse_declaration(token);
         }
 
         default:

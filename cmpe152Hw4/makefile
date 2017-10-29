@@ -55,7 +55,6 @@ SRCS =  Pascal.cpp \
         wci/frontend/pascal/parsers/IfStatementParser.cpp \
         wci/frontend/pascal/parsers/ProgramParser.cpp \
         wci/frontend/pascal/parsers/RecordTypeParser.cpp \
-        wci/frontend/pascal/parsers/ComplexTypeParser.cpp \
         wci/frontend/pascal/parsers/RepeatStatementParser.cpp \
         wci/frontend/pascal/parsers/SimpleTypeParser.cpp \
         wci/frontend/pascal/parsers/StatementParser.cpp \
